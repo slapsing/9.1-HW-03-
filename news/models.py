@@ -45,7 +45,7 @@ class Post(models.Model):
     post_type = models.CharField(max_length=2, choices=POST_TYPES, default=ARTICLE)
     title = models.CharField(max_length=100)  # заголовок статьи/новости;
     content = models.TextField()  # текст статьи/новости;
-    rating = models.FloatField(blank=True, null=True)  # рейтинг статьи/новости.
+    rating = models.FloatField(default=0)  # рейтинг статьи/новости.
     category = models.ManyToManyField(Category, through='PostCategory')  # связь «многие ко многим» с моделью Category
     timestamp = models.DateTimeField(auto_now_add=True)  # автоматически добавляемая дата и время создания
 
