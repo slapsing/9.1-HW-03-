@@ -1,4 +1,5 @@
 >>> from django.contrib.auth.models import User
+>>> 
 >>> from news.models import *
 >>> user1 = User.objects.create_user('Иванов Иван Иванович')
 >>> user1                                                   
