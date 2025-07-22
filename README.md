@@ -1,0 +1,193 @@
+>>> from django.contrib.auth.models import User
+>>> from news.models import *
+>>> user1 = User.objects.create_user('Иванов Иван Иванович')
+>>> user1                                                   
+<User: Иванов Иван Иванович>
+>>> user2 = User.objects.create_user('Петров Петр Петрович')
+>>> user2
+<User: Петров Петр Петрович>
+>>> user1                                                    
+<User: Иванов Иван Иванович>
+>>>
+>>>
+>>> author1 = Author.objects.create(user=user1)
+>>> author1                                    
+<Author: Иванов Иван Иванович>
+>>> author2 = Author.objects.create(user=user2) 
+>>> author2                                    
+<Author: Петров Петр Петрович>
+>>>
+>>>
+>>>
+>>> cat1 = Category.objects.create(name='Спорт') 
+>>> cat1
+<Category: Спорт>
+>>> cat2 = Category.objects.create(name='Образование') 
+>>> cat2                                              
+<Category: Образование>
+>>> cat3 = Category.objects.create(name='Финансы')     
+>>> cat3                                          
+<Category: Финансы>
+>>> cat4 = Category.objects.create(name='Политика') 
+>>> cat1                                           
+<Category: Спорт>
+>>> cat2
+<Category: Образование>
+>>> cat3 
+<Category: Финансы>
+>>> cat4
+<Category: Политика>
+>>> Category.objects.all() 
+<QuerySet [<Category: Спорт>, <Category: Образование>, <Category: Финансы>, <Category: Политика>]>
+>>>
+>>>
+>>> post1 = Post.objects.create(author=author1, post_type=Post.ARTICLE, title='Статья о спорте', content='Текст статьи о спорте')
+>>> post1
+<Post: Статья о спорте>
+>>>
+>>> post1.rating     
+0
+>>> post2 = Post.objects.create(author=author2, post_type=Post.ARTICLE, title='Статья о политике', content='Текст статьи о политике',) 
+>>> post2
+<Post: Статья о политике>
+>>>
+>>>
+>>>
+>>> post3 = Post.objects.create(author=author1, post_type=Post.NEWS, title='Новости о финансах', content='Текст новости о финансах',)  
+>>> post3
+<Post: Новости о финансах>
+>>>
+>>>
+>>>
+>>> PostCategory.objects.create(post=post1, category=cat1) 
+<PostCategory: Статья о спорте - Спорт>
+>>> PostCategory.objects.create(post=post1, category=cat2) 
+<PostCategory: Статья о спорте - Образование>
+>>> post1.category.values()
+<QuerySet [{'id': 1, 'name': 'Спорт'}, {'id': 2, 'name': 'Образование'}]>
+>>>
+>>>
+>>>
+>>> PostCategory.objects.create(post=post2, category=cat2) 
+<PostCategory: Статья о политике - Образование>
+>>> PostCategory.objects.create(post=post3, category=cat4) 
+<PostCategory: Новости о финансах - Политика>
+>>>
+>>>
+>>>
+>>> post2.category.values()                                
+<QuerySet [{'id': 2, 'name': 'Образование'}]>
+>>> post3.category.values()                                
+<QuerySet [{'id': 4, 'name': 'Политика'}]>
+>>>
+>>>
+>>> comment1 = Comment.objects.create(post=post1, user=user1, text='Комментарий 1')        
+>>> comment1
+<Comment: Комментарий от Иванов Иван Иванович>
+>>> comment1.text                  
+'Комментарий 1'
+>>> comment2 = Comment.objects.create(post=post2, user=user2, text='Комментарий 2') 
+>>> comment2
+<Comment: Комментарий от Петров Петр Петрович>
+>>> comment2.text
+'Комментарий 2'
+>>>
+>>> comment3 = Comment.objects.create(post=post3, user=user2, text='Комментарий 3') 
+>>> comment3
+<Comment: Комментарий от Петров Петр Петрович>
+>>> comment3.text
+'Комментарий 3'
+>>> comment4 = Comment.objects.create(post=post2, user=user1, text='Комментарий 4') 
+>>> comment4
+<Comment: Комментарий от Иванов Иван Иванович>
+>>> comment4.text
+'Комментарий 4'
+>>>
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post2.like() 
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post3.like() 
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post1.dislike() 
+>>> post1.dislike()
+>>> post2.dislike() 
+>>> post2.dislike()
+>>> post3.dislike() 
+>>> post3.dislike()
+>>> comment1.like()
+>>> comment1.like()
+>>> comment1.like()
+>>> comment1.like()
+>>> comment1.like()
+>>> comment1.like()
+>>> comment1.like()
+>>> comment2.like() 
+>>> comment2.like()
+>>> comment2.like()
+>>> comment2.like()
+>>> comment1.like() 
+>>>
+>>> comment2.like() 
+>>> comment3.like()
+>>> comment3.like()
+>>> comment3.like()
+>>> comment3.like()
+>>> comment3.like()
+>>> comment3.like()
+>>> comment4.like() 
+>>> comment4.like()
+>>> comment4.like()
+>>> comment4.like()
+>>> comment4.like()
+>>> comment4.like()
+>>> comment4.like()
+>>> comment1.dislike() 
+>>> comment1.dislike()
+>>> comment1.dislike()
+>>> comment2.dislike() 
+>>> comment2.dislike()
+>>> comment2.dislike()
+>>> comment3.dislike() 
+>>> comment3.dislike()
+>>> comment4.dislike() 
+>>> comment4.dislike()
+>>> comment4.dislike()
+>>> author1.update_rating()
+>>> author1.rating         
+36.0
+>>> author2.update_rating() 
+>>> author2.rating          
+33.0
+>>>
+>>> best_author = Author.objects.order_by('-rating').first()
+>>> print(best_author)
+Иванов Иван Иванович
+>>>
+>>> print(f"Лучший автор: {best_author.user.username}, рейтинг: {best_author.rating}")
+Лучший автор: Иванов Иван Иванович, рейтинг: 36.0
+>>>
+>>> print(f"Лучшая статья: {best_post.timestamp} автор: {best_post.author.user.username}, рейтинг : {best_post.rating}, заголовок: {best_post.title}, превью: {best_post.preview()}")
+Лучшая статья: 2025-07-22 15:36:14.747551+00:00 автор: Петров Петр Петрович, рейтинг : 7.0, заголовок: Статья о политике, превью: Текст статьи о политике
+>>> for comment in best_post.comments.all():                                                                 
+...     print(f"{comment.timestamp}, {comment.user.username}, рейтинг: {comment.rating}, текст: '{comment.text}'")        
+...
+2025-07-22 15:51:06.825271+00:00, Петров Петр Петрович, рейтинг: 2.0, текст: 'Комментарий 2'
+2025-07-22 15:53:20.886904+00:00, Иванов Иван Иванович, рейтинг: 4.0, текст: 'Комментарий 4'
+
+
+
+
